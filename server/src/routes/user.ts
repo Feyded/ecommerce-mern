@@ -26,7 +26,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-const verifyToken = (req: Request, res: Response, next: Function) => {
+export const verifyToken = (req: Request, res: Response, next: Function) => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -37,14 +37,27 @@ const verifyToken = (req: Request, res: Response, next: Function) => {
         if (err) {
           return res.sendStatus(403);
         }
-
         next();
       }
     );
+  } else {
+    res.sendStatus(401);
   }
-
-  res.sendStatus(401);
 };
+
+router.get("/availableMoney/:userId", verifyToken, async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({ type: UserErrors.NO_USER_FOUND });
+    }
+    res.json({ availableMoney: user.availableMoney });
+  } catch (err) {
+    res.status(500).json({ type: err });
+  }
+});
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
@@ -53,7 +66,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const user = await UserModel.findOne({ username });
 
     if (!user) {
-      return res.json(UserErrors.NO_USER_FOUND);
+      return res.json(UserErrors.WRONG_CREDENTIALS);
     }
 
     const passwordMatch = await bcrypt.compare(password, user?.password);

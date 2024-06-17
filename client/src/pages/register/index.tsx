@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FormEvent, useEffect, useRef } from "react";
+import { ChangeEventHandler, FormEvent, useEffect, useRef } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -121,7 +121,7 @@ export default function RegisterPage() {
         <div className="w-1/2 shadow-2xl">
           <img
             className="object-cover w-full h-screen hidden md:block"
-            src="https://source.unsplash.com/IXUM4cJynP0"
+            src="https://plus.unsplash.com/premium_photo-1681488350342-19084ba8e224?q=80&w=1988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Background"
           />
         </div>

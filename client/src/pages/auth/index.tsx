@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { UserErrors } from "../../enums/errors";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { UserErrors } from "../../models/errors";
+import { IShopContext, ShopContext } from "../../context/shop-context";
 
 type TLoginPage = {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -15,7 +16,8 @@ export default function AuthPage() {
   const [cookies, setCookies] = useCookies(["access_token"]);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const { isAuthenticated, setIsAuthenticated } =
+    useContext<IShopContext>(ShopContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,15 +39,12 @@ export default function AuthPage() {
       password,
     });
 
-    if (
-      result.data === UserErrors.NO_USER_FOUND ||
-      result.data === UserErrors.USERNAME_ALREADY_EXISTS ||
-      result.data === UserErrors.WRONG_CREDENTIALS
-    ) {
+    if (result.data === UserErrors.WRONG_CREDENTIALS) {
       toast.error(result.data);
       return;
     }
 
+    setIsAuthenticated(true);
     localStorage.setItem("userID", result.data.userID);
     setCookies("access_token", result.data.token);
     navigate("/");
@@ -124,7 +123,7 @@ function LoginPage({ handleSubmit, setUsername, setPassword }: TLoginPage) {
         <div className="w-1/2 shadow-2xl">
           <img
             className="object-cover w-full h-screen hidden md:block"
-            src="https://source.unsplash.com/IXUM4cJynP0"
+            src="https://plus.unsplash.com/premium_photo-1681488350342-19084ba8e224?q=80&w=1988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="auth-background"
           />
         </div>
