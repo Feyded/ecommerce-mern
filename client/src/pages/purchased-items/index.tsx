@@ -5,12 +5,15 @@ import { useNavigate } from "react-router-dom";
 export default function PurchasedItemsPage() {
   const { purchasedItems, isAuthenticated } =
     useContext<IShopContext>(ShopContext);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth");
     }
   }, []);
+  
   return (
     <div className="bg-white">
       {purchasedItems.length > 0 ? (

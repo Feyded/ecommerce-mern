@@ -4,6 +4,7 @@ import axios from "axios";
 
 export const useGetProducts = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  
   const getProduct = async () => {
     try {
       const fetchedProduct = await axios.get("http://localhost:3001/product");

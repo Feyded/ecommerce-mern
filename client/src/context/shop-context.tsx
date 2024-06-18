@@ -150,18 +150,14 @@ export const ShopContextProvider = (props: any) => {
   const checkOut = async () => {
     const body = { customerId: localStorage.getItem("userID"), cartItems };
     try {
-      const result = await axios.post(
-        "http://localhost:3001/product/checkout",
-        body,
-        {
-          headers,
-        }
-      );
+      await axios.post("http://localhost:3001/product/checkout", body, {
+        headers,
+      });
 
       setCartItems({});
       fetchAvailableMoney();
       fetchPurchasedItems();
-      navigate("/");
+      toast.success("Item purchased!");
     } catch (error: any) {
       if (error.response.data.type) {
         toast.error(error.response.data.type);
